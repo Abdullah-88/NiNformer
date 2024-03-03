@@ -6,7 +6,7 @@ from torch import nn
 from torch.utils.data import DataLoader 
 from torchvision import datasets 
 from torchvision.transforms import ToTensor, Normalize, RandomCrop, RandomHorizontalFlip, RandomRotation, Compose 
-from core import NiNformer
+from ninformer import NiNformer
 
 transform = Compose([
 RandomCrop(32, padding=4),
@@ -152,7 +152,7 @@ def test(dataloader, model, loss_fn):
 
 # apply train and test
 
-logname = "/home/abdullah/Proposals_experiments/NiNformer/Experiments_cifar10/logs_ninformer/logs_cifar10.csv"
+logname = "/PATH/NiNformer/Experiments_cifar10/logs_ninformer/logs_cifar10.csv"
 if not os.path.exists(logname):
   with open(logname, 'w') as logfile:
     logwriter = csv.writer(logfile, delimiter=',')
@@ -172,7 +172,7 @@ for epoch in range(epochs):
 print("Done!")
 
 # saving trained model
-path = "/home/abdullah/Desktop/Proposals_experiments/NiNformer/Experiments_cifar10/weights_ninformer"
+path = "/PATH/NiNformer/Experiments_cifar10/weights_ninformer"
 model_name = "NiNformerImageClassification_cifar10"
 torch.save(model.state_dict(), f"{path}/{model_name}.pth")
 print(f"Saved Model State to {path}/{model_name}.pth ")

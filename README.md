@@ -14,4 +14,4 @@ The attention mechanism is the primary component of the transformer architecture
 
 Publisher link: https://link.springer.com/article/10.1007/s00521-025-11226-1 
 
-arxiv Link : https://arxiv.org/abs/2403.02411
+arXiv Link : https://arxiv.org/abs/2403.02411

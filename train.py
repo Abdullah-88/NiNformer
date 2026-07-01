@@ -9,8 +9,7 @@ from torchvision.transforms import ToTensor, Normalize, RandomCrop, RandomHorizo
 from ninformer import NiNformer
 
 transform = Compose([
-RandomCrop(32, padding=4),
-RandomHorizontalFlip(), 
+ 
 ToTensor(),
 Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 

@@ -70,7 +70,7 @@ class NiNformerImageClassification(NiNformer):
         patches = patches.permute(0, 2, 3, 1)
         patches = patches.view(batch_size, -1, num_channels)
         embedding = self.model(patches)
-        embedding = embedding.mean(dim=1) # global average pooling
+        embedding = embedding.mean(dim=1) 
         out = self.classifier(embedding)
         return out
 

@@ -1,4 +1,3 @@
-#imports
 import os
 import csv
 import torch
@@ -28,7 +27,7 @@ test_data = datasets.CIFAR10(
                                        download=True,
                                        transform=transform 
                                        )                                       
-# create dataloaders  
+
                                      
 batch_size = 128
 
@@ -41,20 +40,10 @@ for X, y in test_dataloader:
     print(f"Shape of y:{y.shape}{y.dtype}")
     break
 
-# size checking for loading images
-def check_sizes(image_size, patch_size):
-    sqrt_num_patches, remainder = divmod(image_size, patch_size)
-    assert remainder == 0, "`image_size` must be divisibe by `patch_size`"
-    num_patches = sqrt_num_patches ** 2
-    return num_patches
 
-
-
-# create model
-# Get cpu or gpu device for training.
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"using {device} device") 
-# model definition
+
 
 class NiNformerImageClassification(NiNformer):
     def __init__(
@@ -69,7 +58,6 @@ class NiNformerImageClassification(NiNformer):
         num_layers=4,
         dropout=0.5
     ):
-        num_patches = check_sizes(image_size, patch_size)
         super().__init__(d_model, d_ffn, seq_len, num_layers,dropout)
         self.patcher = nn.Conv2d(
             in_channels, d_model, kernel_size=patch_size, stride=patch_size
@@ -89,13 +77,13 @@ class NiNformerImageClassification(NiNformer):
 model = NiNformerImageClassification().to(device)
 print(model)
 
-# Optimizer
+
 
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(),lr=1e-3)
 
 
-# Training Loop
+
 
 def train(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
@@ -106,11 +94,11 @@ def train(dataloader, model, loss_fn, optimizer):
     for batch, (X,y) in enumerate(dataloader):
         X, y = X.to(device), y.to(device)
        
-        #compute prediction error
+       
         pred = model(X)
         loss = loss_fn(pred,y)
         
-        # backpropagation
+       
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -128,7 +116,7 @@ def train(dataloader, model, loss_fn, optimizer):
 
 
 
-# Test loop
+
 def test(dataloader, model, loss_fn):
     size = len(dataloader.dataset)            
     num_batches = len(dataloader)
@@ -149,7 +137,7 @@ def test(dataloader, model, loss_fn):
 
 
 
-# apply train and test
+
 
 logname = "/PATH/NiNformer/Experiments_cifar10/logs_ninformer/logs_cifar10.csv"
 if not os.path.exists(logname):
@@ -170,7 +158,7 @@ for epoch in range(epochs):
                             test_loss, test_acc])
 print("Done!")
 
-# saving trained model
+
 path = "/PATH/NiNformer/Experiments_cifar10/weights_ninformer"
 model_name = "NiNformerImageClassification_cifar10"
 torch.save(model.state_dict(), f"{path}/{model_name}.pth")

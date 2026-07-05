@@ -4,8 +4,6 @@ from torch import nn
 from torch.nn import functional as F
 from einops.layers.torch import Rearrange
 
-
-
 class FeedForward(nn.Module):
     def __init__(self, dim, hidden_dim, dropout):
         super().__init__()
@@ -18,8 +16,6 @@ class FeedForward(nn.Module):
         )
     def forward(self, x):
         return self.net(x)
-
-
 
 class MixerBlock(nn.Module):
 
@@ -41,14 +37,9 @@ class MixerBlock(nn.Module):
     def forward(self, x):
 
         x = x + self.token_mix(x)
-
         x = x + self.channel_mix(x)
 
         return x
-
-
-
-
 
 class MixerGatingUnit(nn.Module):
     def __init__(self,dim, seq_len, token_dim, channel_dim, dropout):
@@ -62,15 +53,14 @@ class MixerGatingUnit(nn.Module):
         v = self.Mixer(v)
         out = u * v
         return out
-
-
+        
 class NiNBlock(nn.Module):
-    def __init__(self, d_model, d_ffn, seq_len,dropout):
+    def __init__(self, d_model, d_ffn, seq_len, dropout):
         super().__init__()
        
         self.norm = nn.LayerNorm(d_model)       
-        self.mgu = MixerGatingUnit(d_model,seq_len,d_ffn,d_ffn,dropout)
-        self.ffn = FeedForward(d_model,d_ffn,dropout)
+        self.mgu = MixerGatingUnit(d_model, seq_len, d_ffn, d_ffn,  dropout)
+        self.ffn = FeedForward(d_model, d_ffn, dropout)
     def forward(self, x):
         residual = x
         x = self.norm(x)
@@ -82,22 +72,13 @@ class NiNBlock(nn.Module):
         out = x + residual
         return out
 
-
 class NiNformer(nn.Module):
-    def __init__(self, d_model, d_ffn, seq_len, num_layers,dropout):
+    def __init__(self, d_model, d_ffn, seq_len, num_layers, dropout):
         super().__init__()
         
         self.model = nn.Sequential(
-            *[NiNBlock(d_model, d_ffn, seq_len,dropout) for _ in range(num_layers)]
+            *[NiNBlock(d_model, d_ffn, seq_len, dropout) for _ in range(num_layers)]
         )
 
     def forward(self, x):
         return self.model(x)
-
-
-
-
-
-
-
-

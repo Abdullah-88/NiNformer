@@ -100,7 +100,7 @@ def train(dataloader, model, loss_fn, optimizer):
 
     train_loss /= num_batches
     train_accuracy = 100. * correct.item() / size
-    print(train_accuracy)
+    print(f"Train Metric: \n Accuracy: {(100*correct):>0.1f}% \n")
     return train_loss,train_accuracy 
 
 def test(dataloader, model, loss_fn):
@@ -117,7 +117,7 @@ def test(dataloader, model, loss_fn):
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
     test_loss /= num_batches
     correct /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")  
+    print(f"Test Metrics: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")  
     test_accuracy = 100*correct      
     return test_loss, test_accuracy
 

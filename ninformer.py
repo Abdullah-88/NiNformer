@@ -45,7 +45,7 @@ class MixerGatingUnit(nn.Module):
     def __init__(self,dim, seq_len, token_dim, channel_dim, dropout):
         super().__init__()     
         self.Mixer = MixerBlock(dim, seq_len, token_dim, channel_dim, dropout)
-        self.proj = nn.Linear(dim,dim)
+        self.proj = nn.Linear(dim, dim)
 
     def forward(self, x):
         u, v = x, x 
@@ -53,13 +53,13 @@ class MixerGatingUnit(nn.Module):
         v = self.Mixer(v)
         out = u * v
         return out
-        
+
 class NiNBlock(nn.Module):
     def __init__(self, d_model, d_ffn, seq_len, dropout):
         super().__init__()
        
         self.norm = nn.LayerNorm(d_model)       
-        self.mgu = MixerGatingUnit(d_model, seq_len, d_ffn, d_ffn,  dropout)
+        self.mgu = MixerGatingUnit(d_model, seq_len, d_ffn, d_ffn, dropout)
         self.ffn = FeedForward(d_model, d_ffn, dropout)
     def forward(self, x):
         residual = x
